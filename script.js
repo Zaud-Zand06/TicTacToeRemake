@@ -55,67 +55,49 @@ function GameController(
     board.printBoard();
     console.log(`${getActivePlayer().name}'s turn.`);
   };
-  const playRound = (column, row) => {
-    board.selectSquare(column, row, getActivePlayer().token);
+  
+  const winChecker = () => {
     const boardState = board
-      .getBoard()
-      .map((row) => row.map((cell) => cell.getValue()));
-    console.log(boardState);
-
+    .getBoard()
+    .map((row) => row.map((cell) => cell.getValue()));
     const winConditions = [
-      [
         boardState[0][0] === boardState[0][1] &&
           boardState[0][1] === boardState[0][2] &&
           boardState[0][2] !== "",
-      ],
-      [
         boardState[1][0] === boardState[1][1] &&
           boardState[1][1] === boardState[1][2] &&
           boardState[1][2] !== "",
-      ],
-      [
         boardState[0][0] === boardState[1][0] &&
           boardState[1][0] === boardState[2][0] &&
           boardState[2][0] !== "",
-      ],
-      [
         boardState[0][1] === boardState[1][1] &&
           boardState[1][1] === boardState[2][1] &&
-          boardState[2][1] !== "", 
-      ],
-      [
+          boardState[2][1] !== "",
         boardState[2][0] === boardState[2][1] &&
           boardState[2][1] === boardState[2][2] &&
-          boardState[2][2] !== "", 
-      ],
-      [
+          boardState[2][2] !== "",
         boardState[0][2] === boardState[1][2] &&
           boardState[2][1] === boardState[2][2] &&
-          boardState[2][2] !== "", 
-      ],
-      [
+          boardState[2][2] !== "",
         boardState[0][0] === boardState[1][1] &&
           boardState[1][1] === boardState[2][2] &&
-          boardState[2][2] !== "", 
-      ],
-      [
+          boardState[2][2] !== "",
         boardState[0][2] === boardState[1][1] &&
           boardState[1][1] === boardState[2][0] &&
-          boardState[2][0] !== "", 
-      ],
+          boardState[2][0] !== ""
     ];
-    console.log(winConditions);
-
     for (let index = 0; index < winConditions.length; index++) {
-      if (winConditions[index].every(Boolean) == true) {
-        alert(`${getActivePlayer()} wins!`);
-      }
+      winConditions[index] == true ? console.log(winConditions[index]) : false;
     }
+  };
+  
+  const playRound = (column, row) => {
+    board.selectSquare(column, row, getActivePlayer().token);
     printNewRound();
     switchPlayerTurn();
   };
   printNewRound();
-  return { playRound, getActivePlayer, getBoard: board.getBoard };
+  return { playRound, getActivePlayer, winChecker, getBoard: board.getBoard };
 }
 
 function ScreenController() {
@@ -123,6 +105,7 @@ function ScreenController() {
   const playerTurnDiv = document.querySelector(".turn-updater");
   const boardDiv = document.querySelector(".board");
   const updateBar = document.querySelector(".notifications");
+  updateBar.textContent = 'who wins??'
 
   const updateScreen = () => {
     boardDiv.textContent = "";
@@ -139,6 +122,9 @@ function ScreenController() {
         boardDiv.appendChild(cellButton);
       });
     });
+    if (game.winChecker() == true) {
+      updateBar.textContent = activePlayer + " wins!"
+    }
   };
 
   function clickHandlerBoard(e) {
@@ -153,7 +139,7 @@ function ScreenController() {
     updateScreen();
   }
   boardDiv.addEventListener("click", clickHandlerBoard);
-
+  
   updateScreen();
 }
 
