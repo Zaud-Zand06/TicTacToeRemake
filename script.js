@@ -87,8 +87,13 @@ function GameController(
           boardState[2][0] !== ""
     ];
     for (let index = 0; index < winConditions.length; index++) {
-      winConditions[index] == true ? console.log(winConditions[index]) : false;
+      if (winConditions[index] == true) {
+        console.log(activePlayer.name + ' wins!');
+        return true;
+      }
     }
+
+
   };
   
   const playRound = (column, row) => {
@@ -123,7 +128,7 @@ function ScreenController() {
       });
     });
     if (game.winChecker() == true) {
-      updateBar.textContent = activePlayer + " wins!"
+      updateBar.textContent = activePlayer.name + " wins!";
     }
   };
 
