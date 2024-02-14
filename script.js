@@ -56,53 +56,58 @@ function GameController(
     board.printBoard();
     console.log(`${getActivePlayer().name}'s turn.`);
   };
-  
+
   const winChecker = () => {
     const boardState = board
-    .getBoard()
-    .map((row) => row.map((cell) => cell.getValue()));
+      .getBoard()
+      .map((row) => row.map((cell) => cell.getValue()));
     const winConditions = [
-        boardState[0][0] === boardState[0][1] &&
-          boardState[0][1] === boardState[0][2] &&
-          boardState[0][2] !== "",
-        boardState[1][0] === boardState[1][1] &&
-          boardState[1][1] === boardState[1][2] &&
-          boardState[1][2] !== "",
-        boardState[0][0] === boardState[1][0] &&
-          boardState[1][0] === boardState[2][0] &&
-          boardState[2][0] !== "",
-        boardState[0][1] === boardState[1][1] &&
-          boardState[1][1] === boardState[2][1] &&
-          boardState[2][1] !== "",
-        boardState[2][0] === boardState[2][1] &&
-          boardState[2][1] === boardState[2][2] &&
-          boardState[2][2] !== "",
-        boardState[0][2] === boardState[1][2] &&
-          boardState[2][1] === boardState[2][2] &&
-          boardState[2][2] !== "",
-        boardState[0][0] === boardState[1][1] &&
-          boardState[1][1] === boardState[2][2] &&
-          boardState[2][2] !== "",
-        boardState[0][2] === boardState[1][1] &&
-          boardState[1][1] === boardState[2][0] &&
-          boardState[2][0] !== ""
+      boardState[0][0] === boardState[0][1] &&
+        boardState[0][1] === boardState[0][2] &&
+        boardState[0][2] !== "",
+      boardState[1][0] === boardState[1][1] &&
+        boardState[1][1] === boardState[1][2] &&
+        boardState[1][2] !== "",
+      boardState[0][0] === boardState[1][0] &&
+        boardState[1][0] === boardState[2][0] &&
+        boardState[2][0] !== "",
+      boardState[0][1] === boardState[1][1] &&
+        boardState[1][1] === boardState[2][1] &&
+        boardState[2][1] !== "",
+      boardState[2][0] === boardState[2][1] &&
+        boardState[2][1] === boardState[2][2] &&
+        boardState[2][2] !== "",
+      boardState[0][2] === boardState[1][2] &&
+        boardState[2][1] === boardState[2][2] &&
+        boardState[2][2] !== "",
+      boardState[0][0] === boardState[1][1] &&
+        boardState[1][1] === boardState[2][2] &&
+        boardState[2][2] !== "",
+      boardState[0][2] === boardState[1][1] &&
+        boardState[1][1] === boardState[2][0] &&
+        boardState[2][0] !== "",
     ];
     for (let index = 0; index < winConditions.length; index++) {
       if (winConditions[index] == true) {
-        console.log(activePlayer.name + ' wins!');
+        console.log(activePlayer.name + " wins!");
         return true;
       }
-      for (let index = 0; index < array.length; index++) {
-        const element = array[index];
-        
+    }
+  };
+
+  const tieChecker = () => {
+    const boardState = board
+    .getBoard()
+    .map((row) => row.map((cell) => cell.getValue()));
+    if (boardState[0].every((cellVal) => cellVal !== "")) {
+      if (boardState[1].every((cellVal) => cellVal !== "")) {
+        if (boardState[2].every((cellVal) => cellVal !== "")) {
+          return true;
+        }
       }
-    };
+    }
   };
 
-  const winState = () => {
-
-  };
-  
   const playRound = (column, row) => {
     board.selectSquare(column, row, getActivePlayer().token);
     if (winChecker() !== true) {
@@ -111,7 +116,7 @@ function GameController(
     }
   };
   printNewRound();
-  return { playRound, getActivePlayer, winChecker, getBoard: board.getBoard };
+  return { playRound, getActivePlayer, tieChecker, winChecker, getBoard: board.getBoard };
 }
 
 function ScreenController() {
@@ -119,7 +124,7 @@ function ScreenController() {
   const playerTurnDiv = document.querySelector(".turn-updater");
   const boardDiv = document.querySelector(".board");
   const updateBar = document.querySelector(".notifications");
-  updateBar.textContent = 'who wins??'
+  updateBar.textContent = "who wins??";
 
   const updateScreen = () => {
     boardDiv.textContent = "";
@@ -139,6 +144,9 @@ function ScreenController() {
     if (game.winChecker() == true) {
       updateBar.textContent = activePlayer.name + " wins!";
     }
+    if (game.tieChecker() == true) {
+      updateBar.textContent = 'TIE! Play again :)';
+    }
   };
 
   function clickHandlerBoard(e) {
@@ -153,7 +161,7 @@ function ScreenController() {
     updateScreen();
   }
   boardDiv.addEventListener("click", clickHandlerBoard);
-  
+
   updateScreen();
 }
 
