@@ -27,8 +27,9 @@ function Cell() {
   const addToken = (player) => {
     value = player;
   };
+  const resetValue = () => value = '';  
   const getValue = () => value;
-  return { addToken, getValue };
+  return { addToken, getValue, resetValue };
 }
 
 function GameController(
@@ -91,15 +92,23 @@ function GameController(
         console.log(activePlayer.name + ' wins!');
         return true;
       }
-    }
+      for (let index = 0; index < array.length; index++) {
+        const element = array[index];
+        
+      }
+    };
+  };
 
+  const winState = () => {
 
   };
   
   const playRound = (column, row) => {
     board.selectSquare(column, row, getActivePlayer().token);
-    printNewRound();
-    switchPlayerTurn();
+    if (winChecker() !== true) {
+      switchPlayerTurn();
+      printNewRound();
+    }
   };
   printNewRound();
   return { playRound, getActivePlayer, winChecker, getBoard: board.getBoard };
