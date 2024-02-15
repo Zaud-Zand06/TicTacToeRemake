@@ -51,6 +51,9 @@ function GameController(
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
+  const playerCreator = (player, number) => {
+    players[number].name = player;
+  };
   const getActivePlayer = () => activePlayer;
   const printNewRound = () => {
     board.printBoard();
@@ -116,13 +119,15 @@ function GameController(
     }
   };
   printNewRound();
-  return { playRound, getActivePlayer, tieChecker, winChecker, getBoard: board.getBoard };
+  return { playerCreator, playRound, getActivePlayer, tieChecker, winChecker, getBoard: board.getBoard };
 }
 
 function ScreenController() {
   const game = GameController();
   const playerTurnDiv = document.querySelector(".turn-updater");
   const boardDiv = document.querySelector(".board");
+  const playerNameForm0 = document.querySelector('#form-0');
+  const playerNameForm1 = document.querySelector('#form-1');
   const updateBar = document.querySelector(".notifications");
   updateBar.textContent = "who wins??";
 
@@ -161,6 +166,18 @@ function ScreenController() {
     updateScreen();
   }
   boardDiv.addEventListener("click", clickHandlerBoard);
+  playerNameForm0.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const playerName = document.querySelector('#player-name-0').value;
+    game.playerCreator(playerName, 0);
+    updateScreen();
+  })
+  playerNameForm1.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const playerName = document.querySelector('#player-name-1').value;
+    game.playerCreator(playerName, 1);
+    updateScreen();
+  })
 
   updateScreen();
 }

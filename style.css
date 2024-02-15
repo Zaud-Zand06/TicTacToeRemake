@@ -33,3 +33,21 @@ body {
   background: lightyellow;
   cursor: pointer;
 }
+
+.score-keeper {
+  display: flex;
+  width: 100%;
+  height: 25%;
+  margin-top: 20px;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.score-keeper form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+
