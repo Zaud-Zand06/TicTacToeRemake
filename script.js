@@ -41,10 +41,12 @@ function GameController(
     {
       name: playerOneName,
       token: "X",
+      score: 0,
     },
     {
       name: playerTwoName,
       token: "O",
+      score: 0,
     },
   ];
   let activePlayer = players[0];
@@ -119,7 +121,7 @@ function GameController(
     }
   };
   printNewRound();
-  return { playerCreator, playRound, getActivePlayer, tieChecker, winChecker, getBoard: board.getBoard };
+  return { playerCreator, players, playRound, getActivePlayer, tieChecker, winChecker, getBoard: board.getBoard };
 }
 
 function ScreenController() {
@@ -128,9 +130,11 @@ function ScreenController() {
   const boardDiv = document.querySelector(".board");
   const playerNameForm0 = document.querySelector('#form-0');
   const playerNameForm1 = document.querySelector('#form-1');
+  const playerScore0 = document.querySelector('.player-0-scorecard');
+  const playerScore1 = document.querySelector('.player-1-scorecard');
   const updateBar = document.querySelector(".notifications");
   updateBar.textContent = "who wins??";
-
+  
   const updateScreen = () => {
     boardDiv.textContent = "";
     const board = game.getBoard();
@@ -148,12 +152,15 @@ function ScreenController() {
     });
     if (game.winChecker() == true) {
       updateBar.textContent = activePlayer.name + " wins!";
+      activePlayer.score += 1;
     }
+    playerScore0.textContent = game.players[0].score;
+    playerScore1.textContent = game.players[1].score;
     if (game.tieChecker() == true) {
       updateBar.textContent = 'TIE! Play again :)';
     }
   };
-
+  
   function clickHandlerBoard(e) {
     const selectedColumn = e.target.dataset.column;
     const selectedRow = e.target.dataset.row;
